@@ -2,61 +2,53 @@ import React, { useState, useRef, useEffect } from "react";
 import  "./App.css"
 import GameList from "./GameList"
 
+import SearchBox from "./SearchBox";
+
 const LOCAL_STORAGE_KEY = 'gameDb.games'
 
 function App() {
 
   const [games, setGames] = useState([])
+  const [myGames, setMyGames] = useState([])
   const [listInistialised, initialiseList] = useState(false)
-  const gameNameRef = useRef()
+  const [searchQuery, setSearchQuery] = useState('')
 
   //First load any saved list from local storage
   useEffect(() => {
     const storedGames = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY))
     if (storedGames) {
-      setGames(storedGames)
+      setMyGames(storedGames)
       initialiseList(true)
     }
   }, [])
   //If list changed, store the change to local storage (only if initial loading done)
   useEffect(() => {
     if(listInistialised) {
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(games))
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(myGames))
     }
-  }, [games])
+  }, [myGames])
 
-  function generateUniqueId() {
-    return '_' + Math.random().toString(36)// Example of a simple unique ID generation
+
+  function saveFavourite(id) {
+    const game = games.find(game => game.id === id)
+    setMyGames([...myGames], game)
   }
 
-  function toggleFavourite(id) {
-    const newGames = [...games]
-    const game = newGames.find(game => game.id === id)
-    game.favourite = !game.favourite
-    setGames(newGames)
-  }
+  const getGameRequest = async (page) => {
+    var query = searchQuery + 'page=' + page
+    const response = await fetch(`http://localhost:3001/api/search?query=${query}`);
+    const responseJson = await response.json();
+    if (responseJson.results) {
+      setGames(responseJson.results)
+      var remaining = responseJson.number_of_total_results - responseJson.number_of_page_results;
+      
+    }
+  };
 
-  function handleSearchGame(event) {
 
-  }
-
-  function handleAddGame(event) {
-    const title = gameNameRef.current.value
-    if (title === '') return
-    console.log(title)
-    setGames(oldGames => {
-      const newGame = { id: generateUniqueId(), title: title, favourite: false };
-      return [...oldGames, newGame]
-    })
-    gameNameRef.current.value = ''
-
-  }
-
-  function handleRemoveMarked() {
-    const newGames = games.filter(game => !game.favourite)
-    setGames(newGames)
-  }
-
+  useEffect (() => {
+    getGameRequest(1);
+  }, [searchQuery])
 
   return (
     <>
@@ -65,16 +57,12 @@ function App() {
       <div id="list">
         <div id="list-items">
 
-          <GameList games={games} toggleFavourite={toggleFavourite}/>
+          <GameList games={games} toggleFavourite={saveFavourite}/>
         </div>
       </div>
       <div id="controls">
 
-          <input ref={gameNameRef} type="text" />
-          <button onClick={handleSearchGame}> Find Game</button>
-          <button onClick={handleAddGame}> Add Game</button>
-          <button onClick={handleRemoveMarked}> Remove Marked</button>
-          <div className="text-text">{games.filter(game => game.favourite).length} Favourite games</div>
+          <SearchBox query={searchQuery} search={setSearchQuery}/>
        
       </div>
 

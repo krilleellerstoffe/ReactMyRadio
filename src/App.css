@@ -12,10 +12,10 @@ body {
 
 .list-item {
   cursor: pointer;
-  display: inline-block;
+  display: inline-flex;
   max-height: 300px;
-  max-width: 220px;
-  padding: clamp(0.25rem, 0.5vw, 0.25rem) 0rem;
+  max-width: 200px;
+  padding: clamp(1rem, 1vw, 1rem) 0.5rem;
   transition: opacity 400ms ease;
 }
 
@@ -32,7 +32,9 @@ body {
 
 .item-img {
     cursor: pointer;
-    max-height: 200px;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
     padding: clamp(0.25rem, 0.5vw, 1rem) 0rem;
     transition: opacity 400ms ease;
 }

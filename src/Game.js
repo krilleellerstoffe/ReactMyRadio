@@ -9,8 +9,7 @@ export default function Game({game, toggleFavourite}) {
         
         <div className="list-item">
             <label onClick={handleGameClick}>
-                <h2 className="item-text">{game.title} {game.id}</h2>
-                <img className="item-img" src="https://cdn.pixabay.com/photo/2017/02/20/04/49/ultimate-2081605_1280.png" alt={game.title}></img>
+                <img className="item-img" src={game.image.original_url} alt={game.name} title={game.name}></img>
             </label>
         </div>
             
