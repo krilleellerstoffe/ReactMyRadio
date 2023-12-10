@@ -64,7 +64,7 @@ function App() {
       <div className="text-text"><h1>Welcome to your favourite Games!</h1></div>
       <div id="list">
         <div id="list-items">
-          <GameList games={games} toggleFavourite={saveFavourite} overlay={AddOverlay}/>
+          <GameList games={games} favourite='false' toggleFavourite={saveFavourite} overlay={AddOverlay}/>
         </div>
       </div>
 
@@ -76,7 +76,7 @@ function App() {
       <div id="list">
         <div id="list-items">
           <h2 className="sub-text">Your favourites:</h2>
-          <GameList games={myGames} toggleFavourite={removeFavourite}/>
+          <GameList games={myGames} favourite='true' toggleFavourite={removeFavourite}/>
         </div>
       </div>
 
