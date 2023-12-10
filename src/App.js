@@ -3,6 +3,7 @@ import  "./App.css"
 import GameList from "./GameList"
 
 import SearchBox from "./SearchBox";
+import AddOverlay from "./AddOverlay";
 
 const LOCAL_STORAGE_KEY = 'gameDb.games'
 
@@ -61,27 +62,25 @@ function App() {
   return (
     <>
       <div className="text-text"><h1>Welcome to your favourite Games!</h1></div>
-
       <div id="list">
         <div id="list-items">
-
-          <GameList games={games} toggleFavourite={saveFavourite}/>
+          <GameList games={games} toggleFavourite={saveFavourite} overlay={AddOverlay}/>
         </div>
       </div>
-      <div id="controls">
 
+      <div id="controls">
+          <h2 className="sub-text">Search for new games</h2>
           <SearchBox query={searchQuery} search={setSearchQuery}/>
-       
       </div>
+      
       <div id="list">
         <div id="list-items">
-
+          <h2 className="sub-text">Your favourites:</h2>
           <GameList games={myGames} toggleFavourite={removeFavourite}/>
         </div>
       </div>
 
       <div id="list-background-pattern"></div>
-      <div id="list-background-image"></div>
     </>
   );
   
