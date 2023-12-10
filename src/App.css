@@ -59,7 +59,7 @@ body {
     margin-left: clamp(4rem, 5vw, 48rem);
     margin-bottom: clamp(4rem, 5vw, 48rem);
     padding: clamp(0.25rem, 1vw, 1rem) 0rem;
-    position: fixed;
+    position: relative;
     z-index: 2;
 
 }

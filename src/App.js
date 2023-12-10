@@ -17,35 +17,43 @@ function App() {
   useEffect(() => {
     const storedGames = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY))
     if (storedGames) {
+      console.log("loading")
       setMyGames(storedGames)
-      initialiseList(true)
     }
+    initialiseList(true)
   }, [])
+
   //If list changed, store the change to local storage (only if initial loading done)
   useEffect(() => {
     if(listInistialised) {
+      console.log("saving")
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(myGames))
     }
   }, [myGames])
 
-
+  //Add new favourite game to list
   function saveFavourite(id) {
-    const game = games.find(game => game.id === id)
-    setMyGames([...myGames], game)
+    console.log("adding favourite" + id)
+    const newFavouriteGame = games.find(game => game.id === id)
+    setMyGames([...myGames, newFavouriteGame])
   }
-
+  //Update list excluding removed game
+  function removeFavourite(id) {
+    console.log("removing favourite" + id)
+    const newlist = myGames.filter(game => game.id !== id)
+    setMyGames(newlist)
+  }
+  //Make a search for a game from the API
   const getGameRequest = async (page) => {
-    var query = searchQuery + 'page=' + page
-    const response = await fetch(`http://localhost:3001/api/search?query=${query}`);
+    var query = searchQuery
+    const response = await fetch(`http://localhost:3001/api/search?query=${query}&page=${page}`);
     const responseJson = await response.json();
     if (responseJson.results) {
       setGames(responseJson.results)
       var remaining = responseJson.number_of_total_results - responseJson.number_of_page_results;
-      
     }
   };
-
-
+  //Trigger search when search field updated
   useEffect (() => {
     getGameRequest(1);
   }, [searchQuery])
@@ -64,6 +72,12 @@ function App() {
 
           <SearchBox query={searchQuery} search={setSearchQuery}/>
        
+      </div>
+      <div id="list">
+        <div id="list-items">
+
+          <GameList games={myGames} toggleFavourite={removeFavourite}/>
+        </div>
       </div>
 
       <div id="list-background-pattern"></div>
