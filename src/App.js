@@ -1,9 +1,8 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import  "./App.css"
 import GameList from "./GameList"
 
 import SearchBox from "./SearchBox";
-import AddOverlay from "./AddOverlay";
 
 const LOCAL_STORAGE_KEY = 'gameDb.games'
 
@@ -51,7 +50,6 @@ function App() {
     const responseJson = await response.json();
     if (responseJson.results) {
       setGames(responseJson.results)
-      var remaining = responseJson.number_of_total_results - responseJson.number_of_page_results;
     }
   };
   //Trigger search when search field updated
@@ -64,7 +62,7 @@ function App() {
       <div className="text-text"><h1>Welcome to your favourite Games!</h1></div>
       <div id="list">
         <div id="list-items">
-          <GameList games={games} favourite='false' toggleFavourite={saveFavourite} overlay={AddOverlay}/>
+          <GameList games={games} favourite='false' toggleFavourite={saveFavourite}/>
         </div>
       </div>
 
