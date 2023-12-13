@@ -61,7 +61,7 @@ function App() {
     // }
     var query = searchQuery
     const baseAPIurl = `https://www.giantbomb.com/api/search?api_key=c5748b92bc0ea8fd7d5239f363241e6d77ef65ab&format=json&resources=game&query=${query}&page=${page}`;
-    const url = 'https://proxy.cors.sh/' + baseAPIurl;
+    const url = 'https://thingproxy.freeboard.io/fetch/' + baseAPIurl;
     const response = await fetch(url);
     const responseJson = await response.json();
     if (responseJson.results) {
