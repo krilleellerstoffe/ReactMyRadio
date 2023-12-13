@@ -43,15 +43,31 @@ function App() {
     const newlist = myGames.filter(game => game.id !== id)
     setMyGames(newlist)
   }
-  //Make a search for a game from the API
+  // //Make a search for a game from the API via proxy
+  // const getGameRequest = async (page) => {
+  //   var query = searchQuery
+  //   const response = await fetch(`http://localhost:3001/api/search?query=${query}&page=${page}`);
+  //   const responseJson = await response.json();
+  //   if (responseJson.results) {
+  //     setGames(responseJson.results)
+  //   }
+  // };
+  //Make a direct search for a game from the API
+  // const importFetch = () => import('node-fetch');
+
   const getGameRequest = async (page) => {
+    // if (!fetch) {
+    //   fetch = await importFetch(); // Fetch the module if not available
+    // }
     var query = searchQuery
-    const response = await fetch(`http://localhost:3001/api/search?query=${query}&page=${page}`);
+    const baseAPIurl = `https://www.giantbomb.com/api/search?api_key=c5748b92bc0ea8fd7d5239f363241e6d77ef65ab&format=json&resources=game&query=${query}&page=${page}`;
+    const url = 'https://proxy.cors.sh/' + baseAPIurl;
+    const response = await fetch(url);
     const responseJson = await response.json();
     if (responseJson.results) {
       setGames(responseJson.results)
     }
-  };
+  }
   //Trigger search when search field updated
   useEffect (() => {
     getGameRequest(1);
