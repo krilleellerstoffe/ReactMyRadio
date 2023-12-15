@@ -1,24 +1,23 @@
 import React, { useState, useEffect } from "react";
 import  "./App.css"
-import GameList from "./GameList"
+import TaskList from "./TaskList"
+import InputBox from "./InputBox";
 
-import SearchBox from "./SearchBox";
-
-const LOCAL_STORAGE_KEY = 'gameDb.games'
+const LOCAL_STORAGE_KEY = 'taskApp.tasks'
 
 function App() {
 
-  const [games, setGames] = useState([])
-  const [myGames, setMyGames] = useState([])
+  const [tasks, setTasks] = useState([])
   const [listInistialised, initialiseList] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
+  const [taskName, setTaskName] = useState('')
+  const [taskID, setTaskID] = useState(1)
 
   //First load any saved list from local storage
   useEffect(() => {
-    const storedGames = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY))
-    if (storedGames) {
+    const stroredTasks = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY))
+    if (stroredTasks) {
       console.log("loading")
-      setMyGames(storedGames)
+      setTasks(stroredTasks)
     }
     initialiseList(true)
   }, [])
@@ -27,77 +26,52 @@ function App() {
   useEffect(() => {
     if(listInistialised) {
       console.log("saving")
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(myGames))
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(tasks))
     }
-  }, [myGames])
+  }, [tasks])
 
-  //Add new favourite game to list
-  function saveFavourite(id) {
-    console.log("adding favourite" + id)
-    const newFavouriteGame = games.find(game => game.id === id)
-    setMyGames([...myGames, newFavouriteGame])
-  }
-  //Update list excluding removed game
-  function removeFavourite(id) {
-    console.log("removing favourite" + id)
-    const newlist = myGames.filter(game => game.id !== id)
-    setMyGames(newlist)
-  }
-  // //Make a search for a game from the API via proxy
-  // const getGameRequest = async (page) => {
-  //   var query = searchQuery
-  //   const response = await fetch(`http://localhost:3001/api/search?query=${query}&page=${page}`);
-  //   const responseJson = await response.json();
-  //   if (responseJson.results) {
-  //     setGames(responseJson.results)
-  //   }
-  // };
-  //Make a direct search for a game from the API
-  // const importFetch = () => import('node-fetch');
-
-  const getGameRequest = async (page) => {
-    // if (!fetch) {
-    //   fetch = await importFetch(); // Fetch the module if not available
-    // }
-    var query = searchQuery
-    const baseAPIurl = `https://www.giantbomb.com/api/search?api_key=c5748b92bc0ea8fd7d5239f363241e6d77ef65ab&format=json&resources=game&query=${query}&page=${page}`;
-    const url = 'https://thingproxy.freeboard.io/fetch/' + baseAPIurl;
-    const response = await fetch(url);
-    const responseJson = await response.json();
-    if (responseJson.results) {
-      setGames(responseJson.results)
+  //Add new task to list
+  function saveTask() {
+    console.log("adding task " + taskID)
+    const task =  {
+      id: taskID,
+      text: taskName
     }
+    setTaskID(taskID + 1)
+    setTasks([...tasks, task])
+    setTaskName('')
   }
-  //Trigger search when search field updated
-  useEffect (() => {
-    getGameRequest(1);
-  }, [searchQuery])
+
+  //make sure input field == taskName
+  useEffect(() => {
+    document.getElementById("taskText").value = taskName
+  }, [taskName])
+
+  //Update list excluding removed task
+  function removeTask(id) {
+    console.log("removing task " + id)
+    const newlist = tasks.filter(task => task.id !== id)
+    setTasks(newlist)
+  }
 
   return (
     <>
-      <div className="text-text"><h1>Welcome to your favourite Games!</h1></div>
-      <div id="list">
-        <div id="list-items">
-          <GameList games={games} favourite='false' toggleFavourite={saveFavourite}/>
-        </div>
-      </div>
-
+    <h1 className="text-text">Welcome to your tasklist!</h1>
       <div id="controls">
-          <h2 className="sub-text">Search for new games</h2>
-          <SearchBox query={searchQuery} search={setSearchQuery}/>
+          <h2 className="sub-text">Add a new task</h2>
+          <InputBox query={taskName} update={setTaskName} save={saveTask}/>
       </div>
       
       <div id="list">
         <div id="list-items">
-          <h2 className="sub-text">Your favourites:</h2>
-          <GameList games={myGames} favourite='true' toggleFavourite={removeFavourite}/>
+          <h2 className="sub-text">Your tasks:</h2>
+          <TaskList tasks={tasks} remove={removeTask}/>
         </div>
       </div>
 
       <div id="list-background-pattern"></div>
     </>
   );
-  
 
 }
 
