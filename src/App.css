@@ -1,18 +1,86 @@
+/* Global style */
+
 body {
     background-color: rgb(20, 20, 20);
     margin: 0px;
+    color: aliceblue;
+    font-size: 20px;
+    margin: 5px;
+    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
+/* Text styling */
+
 .text-text {
-  color: aliceblue;
   text-align: center;
-  font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 .sub-text {
+  
+  text-align: center;
+}
+
+/* Styling for controls and buttons */
+
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+}
+
+button {
+  margin: 10px;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 20px;
   color: aliceblue;
-  text-align:inherit;
-  font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  border: 2px solid aliceblue;
+  background-color: #3e3e3e;
+  transition-duration: 0.4s;
+}
+
+button:hover {
+  background-color: #04AA6D; /* Green */
+}
+
+input {
+  font-size: 20px;
+  margin: 10px;
+}
+
+/* List styling */
+
+.list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(calc(20% - 20px), 1fr));
+  gap: 10px; 
+  max-height: 100vh;
+  max-width: 100vw;
+  overflow-x: scroll;
+}
+
+.list-items {
+  white-space: pre-wrap;
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+}
+
+.list-items:hover > .list-item {
+  opacity: 0.3;
+}
+
+.list-items:hover > .list-item:hover {
+  opacity: 1; 
 }
 
 .list-item {
@@ -25,95 +93,56 @@ body {
   transition: opacity 400ms ease;
 }
 
-.item-text {
-    cursor: pointer;
-    color: aliceblue;
-    text-align: center;
-    word-wrap: break-word;
-    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    max-height: 70vh;
-    padding: clamp(0.25rem, 0.5vw, 0.25rem) 0rem;
-    transition: opacity 400ms ease;
-}
-
-.item-img {
-    cursor: pointer;
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: cover;
-    padding: clamp(0.25rem, 0.5vw, 1rem) 0rem;
-    transition: opacity 400ms ease;
-}
-
-#list {  
-    margin-top: 50px;
-    align-items:flex-start;
-    display: flex;
-    max-height: 70vh;
-    max-width: 100vw;
-    overflow-x: scroll;
-}
-
-#list-items {
-    margin-left: clamp(4rem, 5vw, 48rem);
-    white-space: pre-wrap;
-    position: relative;
-    z-index: 2;
-}
-
-#controls {
-    margin-left: clamp(4rem, 5vw, 48rem);
-    margin-bottom: clamp(4rem, 5vw, 48rem);
-    padding: clamp(0.25rem, 1vw, 1rem) 0rem;
-    position: relative;
-    z-index: 2;
-
-}
-
-.overlay {
-  position: absolute;
-  display: none;
-  width: 100%;
-  height: 70px;
-  bottom: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 2;
-  cursor: pointer;
-}
-
-.overlay-text {
-  position: absolute;
-  top: 10%;
-  left: 10%;
-  font-size: 20px;
-  color: aliceblue;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-
-}
-
 .list-item:hover .overlay {
   display: block;
 }
 
-#list-items:hover ~ #list-background-pattern {
-    background-size: 11vmin 11vmin;
-    opacity: 0.5;
+.item-text {
+  word-wrap: break-word;
+  max-height: 70vh;
+  padding: clamp(0.25rem, 0.5vw, 0.25rem) 0rem;
+  transition: opacity 400ms ease;
 }
 
-#list-items:hover ~ #list-background-image {
-    opacity: 0.1;
+.item-img {
+  cursor: pointer;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+  padding: clamp(0.25rem, 0.5vw, 1rem) 0rem;
+  transition: opacity 400ms ease;
 }
 
-#list-items:hover > .list-item {
-    opacity: 0.3;
+/* Overlay styling */
+
+.overlay {
+  position: absolute;
+  cursor: pointer;
+  display: none;
+  width: 100%;
+  height: 120px;
+  bottom: 10%;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+}
+.overlay-text {
+  position: absolute;
+  width: 100%;
 }
 
-#list-items:hover > .list-item:hover {
-    opacity: 1; 
+.overlay-text.top {
+  top: 5%;
+  font-weight: bold;
+}
+.overlay-text.bottom {
+  bottom: 5%;
+}
+.overlay-text.bottom:hover{
+  bottom: 5%;
 }
 
-#list-background-pattern {
+#background-pattern {
   background-image: radial-gradient(
     rgba(255, 255, 255, 0.1) 9%, 
     transparent 9%
@@ -130,20 +159,4 @@ body {
   width: 100vw;
   z-index: -1; 
   pointer-events: none; 
-}
-
-
-#list-background-image {
-  background-position: center 0%;
-  background-size: 100vmax;
-  height: 100%;
-  left: 0px;  
-  opacity: 0.15;
-  position: absolute;
-  top: 0px;
-  transition: opacity 800ms ease,
-    background-size 800ms ease,
-    background-position 800ms ease;
-  width: 100%;
-  z-index: 0;
 }

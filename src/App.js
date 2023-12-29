@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from "react";
 import  "./App.css"
 import GameList from "./GameList"
-
+import Pagination from "./Pagination"
 import SearchBox from "./SearchBox";
 
-const LOCAL_STORAGE_KEY = 'gameDb.games'
+const LOCAL_STORAGE_KEY = 'mySR.channels'
 
 function App() {
 
   const [games, setGames] = useState([])
   const [myGames, setMyGames] = useState([])
   const [listInistialised, initialiseList] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
+  const [searchQuery, setSearchQuery] = useState(false)
+  const [totalResults, setTotalResults] = useState(0)
+  const [pageNumber, setPageNumber] = useState(1)
 
   //First load any saved list from local storage
   useEffect(() => {
@@ -29,72 +31,59 @@ function App() {
       console.log("saving")
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(myGames))
     }
-  }, [myGames])
+  }, [myGames, listInistialised])
 
   //Add new favourite game to list
   function saveFavourite(id) {
     console.log("adding favourite" + id)
     const newFavouriteGame = games.find(game => game.id === id)
-    setMyGames([...myGames, newFavouriteGame])
+
+    if(!myGames.some(game => game.id === id)) {
+      setMyGames([...myGames, newFavouriteGame])
+    } else {
+      alert(`${newFavouriteGame.name} is already in your favorites`);
+    }
   }
-  //Update list excluding removed game
+  //Update list excluding removed station
   function removeFavourite(id) {
     console.log("removing favourite" + id)
     const newlist = myGames.filter(game => game.id !== id)
     setMyGames(newlist)
   }
-  // //Make a search for a game from the API via proxy
-  // const getGameRequest = async (page) => {
-  //   var query = searchQuery
-  //   const response = await fetch(`http://localhost:3001/api/search?query=${query}&page=${page}`);
-  //   const responseJson = await response.json();
-  //   if (responseJson.results) {
-  //     setGames(responseJson.results)
-  //   }
-  // };
-  //Make a direct search for a game from the API
-  // const importFetch = () => import('node-fetch');
 
-  const getGameRequest = async (page) => {
-    // if (!fetch) {
-    //   fetch = await importFetch(); // Fetch the module if not available
-    // }
-    var query = searchQuery
-    const baseAPIurl = `https://www.giantbomb.com/api/search?api_key=c5748b92bc0ea8fd7d5239f363241e6d77ef65ab&format=json&resources=game&query=${query}&page=${page}`;
-    const url = 'https://thingproxy.freeboard.io/fetch/' + baseAPIurl;
+  const getGameRequest = async () => {
+
+    const url = `https://api.sr.se/api/v2/channels/?format=json&pagination=false`;
+    console.log(url)
     const response = await fetch(url);
-    const responseJson = await response.json();
-    if (responseJson.results) {
-      setGames(responseJson.results)
+    const responseJson = await response.json()
+    console.log(responseJson)
+    if (responseJson.channels) {
+      setGames(responseJson.channels)
     }
   }
-  //Trigger search when search field updated
+  //Trigger search when search div activated
   useEffect (() => {
-    getGameRequest(1);
+    if (searchQuery) {
+        getGameRequest();
+    }
   }, [searchQuery])
 
   return (
     <>
-      <div className="text-text"><h1>Welcome to your favourite Games!</h1></div>
-      <div id="list">
-        <div id="list-items">
-          <GameList games={games} favourite='false' toggleFavourite={saveFavourite}/>
-        </div>
-      </div>
+      <div className="text-text"><h1>Welcome to your radio stations!</h1></div>
 
-      <div id="controls">
-          <h2 className="sub-text">Search for new games</h2>
-          <SearchBox query={searchQuery} search={setSearchQuery}/>
-      </div>
-      
-      <div id="list">
-        <div id="list-items">
+      <div className="list">
+        <div className="list-items">
           <h2 className="sub-text">Your favourites:</h2>
           <GameList games={myGames} favourite='true' toggleFavourite={removeFavourite}/>
         </div>
       </div>
+      
+      <SearchBox query={searchQuery} search={setSearchQuery} games={games} saveFavourite={saveFavourite}/>
+      
+      <div id="background-pattern"></div>
 
-      <div id="list-background-pattern"></div>
     </>
   );
   

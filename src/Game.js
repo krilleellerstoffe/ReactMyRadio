@@ -9,10 +9,10 @@ export default function Game({game, favourite, toggleFavourite}) {
     }
     return (
         
-        <div className="list-item">
+        <div className="list-item" style={{ textAlign: 'center' }}>
             <label onClick={handleGameClick}>
-                <img className="item-img" src={game.image.original_url} alt={game.name} title={game.name}></img>
-                {favourite === 'true' ? <RemoveOverlay /> : <AddOverlay />}
+                <img className="item-img" src={game.image} alt={game.name} title={game.name}></img>
+                {favourite === 'true' ? <RemoveOverlay gameName={game.name} /> : <AddOverlay gameName={game.name}/>}
             </label>
         </div>
             
