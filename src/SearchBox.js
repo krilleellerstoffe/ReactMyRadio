@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState} from 'react';
 import StationList from "./StationList"
 import Pagination from "./Pagination"
 
@@ -12,7 +12,23 @@ export default function SearchBox({query, search, games, saveFavourite}) {
     const handleClick = () => {
         if (!query) {
             setButtonText('Hide Stations')
+            // Show the results list, but animate slowly
             setListVisible(true)
+            const scrollDistance = 22;
+            const totalScrolls = 20;
+            const delayBetweenScrolls = 0;
+            let scrollsCompleted = 0;
+            const scrollStep = () => {
+            if (scrollsCompleted < totalScrolls) {
+                window.scrollBy({
+                  top: scrollDistance,
+                  behavior: 'smooth',
+                });
+                scrollsCompleted++;
+                setTimeout(scrollStep, delayBetweenScrolls);
+              }
+            }
+            scrollStep()
 
         } else {
             setButtonText('Add station')
@@ -34,7 +50,7 @@ export default function SearchBox({query, search, games, saveFavourite}) {
         <div>
 
             <div className="controls">
-                <button id="showStationsBtn"onClick={handleClick}>{buttonText}</button>
+                <button id="showStationsBtn" onClick={handleClick}>{buttonText}</button>
             </div>
 
             {listVisible && (

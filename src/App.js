@@ -74,6 +74,13 @@ function App() {
     <>
       <div className="text-text"><h1>Welcome to your radio stations!</h1></div>
 
+      <div className="now-playing-list" >
+        <div>
+          <h2 className="sub-text">Now playing:</h2>
+          <NowPlayingList games={myGames}/>
+        </div>
+      </div>
+
       <div className="list">
         <div className="list-items">
           <h2 className="sub-text">Your favourites:</h2>
@@ -84,13 +91,6 @@ function App() {
       <SearchBox query={searchQuery} search={setSearchQuery} games={games} saveFavourite={saveFavourite}/>
       
       <div id="background-pattern"></div>
-
-      <div className="now-playing-list" >
-        <div>
-          <h2 className="sub-text">Now playing:</h2>
-          <NowPlayingList games={myGames}/>
-        </div>
-      </div>
 
     </>
   );
