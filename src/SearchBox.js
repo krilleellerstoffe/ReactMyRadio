@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import GameList from "./GameList"
+import StationList from "./StationList"
 import Pagination from "./Pagination"
 
 
@@ -39,14 +39,13 @@ export default function SearchBox({query, search, games, saveFavourite}) {
 
             {listVisible && (
                 <div>
-
                     <div style={{ textAlign: 'center' }}>
                         <input type="text" value={filter} onChange={handleInputChange} placeholder="Search by station name"></input>
                     </div>
                     <div className="list">
                         {/* <Pagination currentPage={pageNumber} totalResults={totalResults} updatePage={setPageNumber} getPage={getGameRequest}/> */}
                         <div className="list-items">
-                        <GameList games={filteredList()} favourite='false' toggleFavourite={saveFavourite}/>
+                        <StationList games={filteredList()} favourite='false' toggleFavourite={saveFavourite}/>
                         </div>
                     </div>
                 </div>

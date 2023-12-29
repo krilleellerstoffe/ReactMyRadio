@@ -2,7 +2,7 @@ import React from 'react';
 import AddOverlay from './AddOverlay';
 import RemoveOverlay from './RemoveOverlay';
 
-export default function Game({game, favourite, toggleFavourite}) {
+export default function Station({game, favourite, toggleFavourite}) {
 
     function handleGameClick(event) {
         toggleFavourite(game.id)

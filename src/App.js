@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import  "./App.css"
-import GameList from "./GameList"
+import StationList from "./StationList"
 import Pagination from "./Pagination"
 import SearchBox from "./SearchBox";
+import NowPlayingList from "./NowPlayingList";
 
 const LOCAL_STORAGE_KEY = 'mySR.channels'
 
@@ -76,13 +77,20 @@ function App() {
       <div className="list">
         <div className="list-items">
           <h2 className="sub-text">Your favourites:</h2>
-          <GameList games={myGames} favourite='true' toggleFavourite={removeFavourite}/>
+          <StationList games={myGames} favourite='true' toggleFavourite={removeFavourite}/>
         </div>
       </div>
       
       <SearchBox query={searchQuery} search={setSearchQuery} games={games} saveFavourite={saveFavourite}/>
       
       <div id="background-pattern"></div>
+
+      <div className="now-playing-list" >
+        <div>
+          <h2 className="sub-text">Now playing:</h2>
+          <NowPlayingList games={myGames}/>
+        </div>
+      </div>
 
     </>
   );
