@@ -3,7 +3,7 @@ import StationList from "./StationList"
 import Pagination from "./Pagination"
 
 
-export default function SearchBox({query, search, games, saveFavourite}) {
+export default function SearchBox({query, search, stations, saveFavourite}) {
 
     const [buttonText, setButtonText] = useState('Add station')
     const [listVisible, setListVisible] = useState(false)
@@ -33,13 +33,17 @@ export default function SearchBox({query, search, games, saveFavourite}) {
         } else {
             setButtonText('Add station')
             setListVisible(false)
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            })
         }
         search(!query);
     };
 
     const filteredList = () => {
-        const filteredGames = games.filter(game => game.name.toLowerCase().includes(filter.toLowerCase()));
-        return filteredGames;
+        const filteredStations = stations.filter(station => station.name.toLowerCase().includes(filter.toLowerCase()));
+        return filteredStations;
     };
 
     const handleInputChange = (e) => {
@@ -59,9 +63,8 @@ export default function SearchBox({query, search, games, saveFavourite}) {
                         <input type="text" value={filter} onChange={handleInputChange} placeholder="Search by station name"></input>
                     </div>
                     <div className="list">
-                        {/* <Pagination currentPage={pageNumber} totalResults={totalResults} updatePage={setPageNumber} getPage={getGameRequest}/> */}
                         <div className="list-items">
-                        <StationList games={filteredList()} favourite='false' toggleFavourite={saveFavourite}/>
+                        <StationList stations={filteredList()} favourite='false' toggleFavourite={saveFavourite}/>
                         </div>
                     </div>
                 </div>

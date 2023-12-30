@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ListenOverlay from './ListenOverlay';
 
-export default function NowPlaying({ game }) {
+export default function NowPlaying({ station }) {
 
     const [currentTrack, setCurrentTrack] = useState('')
     const [currentTrackSpotify, setCurrentTrackSpotify] = useState()
@@ -12,7 +12,7 @@ export default function NowPlaying({ game }) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const url = `https://api.sr.se/api/v2/playlists/rightnow?channelid=${game.id}&format=json`
+                const url = `https://api.sr.se/api/v2/playlists/rightnow?channelid=${station.id}&format=json`
                 const response = await fetch(url)
                 const trackData = await response.json()
                 setCurrentTrack(trackData.playlist.song)
@@ -52,20 +52,23 @@ export default function NowPlaying({ game }) {
         }
     }, [previousTrack])
 
-    function handleImageClick(event) {
-        const liveUrl = game.liveaudio.url
+    function handleStationClick(event) {
+        const liveUrl = station.liveaudio.url
         window.open(liveUrl, '_blank')
     }
     function handleCurrentClick(event) {
         if (currentTrackSpotify) {
             window.open(currentTrackSpotify.spotify_url, '_blank')
         }
-        
     }
     function handlePreviousClick(event) {
         if (previousTrackSpotify) {
             window.open(previousTrackSpotify.spotify_url, '_blank')
         }
+    }
+    function handleImageClick(event) {
+        console.log(event.target.src)
+        window.open(event.target.src, '_blank')
     }
 
     const SPOTIFY_TOKEN_URL = 'https://accounts.spotify.com/api/token';
@@ -165,14 +168,14 @@ export default function NowPlaying({ game }) {
     return (
         <div className="now-playing-item">
           <div className='item-container'>
-            <div className='image-container' onClick={handleImageClick}>
+            <div className='image-container' onClick={handleStationClick}>
               <img
                 className="item-img"
-                src={game.image}
-                alt={game.name}
-                title={game.name}
+                src={station.image}
+                alt={station.name}
+                title={station.name}
               />
-              <ListenOverlay game={game} />
+              <ListenOverlay station={station} />
             </div>
             <div className='text-container'>
                 {currentTrack ? ( // Check if currentTrack exists
@@ -180,7 +183,7 @@ export default function NowPlaying({ game }) {
                     <p>
                         Current track: <strong>{currentTrack.title}</strong> by <strong>{currentTrack.artist}</strong>
                     </p>
-                    <button class='spotifyButton' onClick={handleCurrentClick}>
+                    <button className='spotifyButton' onClick={handleCurrentClick}>
                         Play on Spotify
                     </button>
                 </div>
@@ -194,9 +197,13 @@ export default function NowPlaying({ game }) {
                     <p>
                         Previous track: <strong>{previousTrack.title}</strong> by <strong>{previousTrack.artist}</strong>
                     </p>
-                    <button class='spotifyButton' onClick={handlePreviousClick}>
-                        Play on Spotify
-                    </button>
+                    {previousTrackSpotify ? (
+                        <button className='spotifyButton' onClick={handlePreviousClick}>
+                            Play on Spotify
+                        </button>
+                    ) : (
+                        <p>Could not find on Spotify</p>
+                    )}
                 </div>
                 ) : (
                     <p>No previous track data available</p>
@@ -207,18 +214,19 @@ export default function NowPlaying({ game }) {
                     
                     <img
                         className="item-img"
-                        onClick={handleCurrentClick}
+                        onClick={handleImageClick}
                         src={currentTrackSpotify.image}
                         alt={currentTrack.name}
                         title={currentTrack.name}
                     />
+                    
                 ) : (<></>
                 )}
                 {previousTrack && previousTrackSpotify ? ( // Check if spotify data exists
                 
                     <img
                         className="item-img"
-                        onClick={handlePreviousClick}
+                        onClick={handleImageClick}
                         src={previousTrackSpotify.image}
                         alt={previousTrack.name}
                         title={previousTrack.name}

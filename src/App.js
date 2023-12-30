@@ -9,19 +9,19 @@ const LOCAL_STORAGE_KEY = 'mySR.channels'
 
 function App() {
 
-  const [games, setGames] = useState([])
-  const [myGames, setMyGames] = useState([])
+  const [stations, setStations] = useState([])
+  const [myStations, setMyStations] = useState([])
   const [listInistialised, initialiseList] = useState(false)
   const [searchQuery, setSearchQuery] = useState(false)
+  //Keep track of results and pages if using pagination
   const [totalResults, setTotalResults] = useState(0)
   const [pageNumber, setPageNumber] = useState(1)
 
   //First load any saved list from local storage
   useEffect(() => {
-    const storedGames = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY))
-    if (storedGames) {
-      console.log("loading")
-      setMyGames(storedGames)
+    const storedStations = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY))
+    if (storedStations) {
+      setMyStations(storedStations)
     }
     initialiseList(true)
   }, [])
@@ -29,44 +29,42 @@ function App() {
   //If list changed, store the change to local storage (only if initial loading done)
   useEffect(() => {
     if(listInistialised) {
-      console.log("saving")
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(myGames))
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(myStations))
     }
-  }, [myGames, listInistialised])
+  }, [myStations, listInistialised])
 
-  //Add new favourite game to list
+  //Add new favourite 
   function saveFavourite(id) {
-    console.log("adding favourite" + id)
-    const newFavouriteGame = games.find(game => game.id === id)
+    const newFavouriteStation = stations.find(station => station.id === id)
 
-    if(!myGames.some(game => game.id === id)) {
-      setMyGames([...myGames, newFavouriteGame])
+    if(!myStations.some(station => station.id === id)) {
+      setMyStations([...myStations, newFavouriteStation])
     } else {
-      alert(`${newFavouriteGame.name} is already in your favorites`);
+      alert(`${newFavouriteStation.name} is already in your favorites`);
     }
   }
-  //Update list excluding removed station
+
+  //Remove a favourite
   function removeFavourite(id) {
-    console.log("removing favourite" + id)
-    const newlist = myGames.filter(game => game.id !== id)
-    setMyGames(newlist)
+    const newlist = myStations.filter(station => station.id !== id)
+    setMyStations(newlist)
   }
 
-  const getGameRequest = async () => {
+  //Search for radio stations
+  const searchForStations = async () => {
 
     const url = `https://api.sr.se/api/v2/channels/?format=json&pagination=false`;
-    console.log(url)
     const response = await fetch(url);
     const responseJson = await response.json()
-    console.log(responseJson)
     if (responseJson.channels) {
-      setGames(responseJson.channels)
+      setStations(responseJson.channels)
     }
   }
+
   //Trigger search when search div activated
   useEffect (() => {
     if (searchQuery) {
-        getGameRequest();
+        searchForStations(); 
     }
   }, [searchQuery])
 
@@ -77,18 +75,18 @@ function App() {
       <div className="now-playing-list" >
         <div>
           <h2 className="sub-text">Now playing:</h2>
-          <NowPlayingList games={myGames}/>
+          <NowPlayingList stations={myStations}/>
         </div>
       </div>
 
       <div className="list">
         <div className="list-items">
           <h2 className="sub-text">Your favourites:</h2>
-          <StationList games={myGames} favourite='true' toggleFavourite={removeFavourite}/>
+          <StationList stations={myStations} favourite='true' toggleFavourite={removeFavourite}/>
         </div>
       </div>
       
-      <SearchBox query={searchQuery} search={setSearchQuery} games={games} saveFavourite={saveFavourite}/>
+      <SearchBox query={searchQuery} search={setSearchQuery} stations={stations} saveFavourite={saveFavourite}/>
       
       <div id="background-pattern"></div>
 

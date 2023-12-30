@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import Station from './Station';
 
-export default function StationList({games, favourite, toggleFavourite}) {
+export default function StationList({stations, favourite, toggleFavourite}) {
 
     return (
-        games.map(game => {
-            return <Station key={game.id} favourite={favourite} toggleFavourite={toggleFavourite} game={game}/>
+        stations.map(station => {
+            return <Station key={station.id} favourite={favourite} toggleFavourite={toggleFavourite} station={station}/>
         })
             
       );

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import NowPlaying from './NowPlaying';
 
-export default function NowPlayingList({games}) {
+export default function NowPlayingList({stations}) {
 
     return (
-        games.map(game => {
-            return <NowPlaying key={game.id} game={game}/>
+        stations.map(station => {
+            return <NowPlaying key={station.id} station={station}/>
         })
             
       );
