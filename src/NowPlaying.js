@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react';
 import ListenOverlay from './ListenOverlay';
 
 export default function NowPlaying({ station }) {
-
-    const [currentTrack, setCurrentTrack] = useState('')
+    const SPOTIFY_TOKEN_URL = 'https://accounts.spotify.com/api/token';
+    const SPOTIFY_CLIENT_ID = process.env.REACT_APP_SPOTIFY_CLIENT_ID
+    const SPOTIFY_CLIENT_SECRET = process.env.REACT_APP_SPOTIFY_CLIENT_SECRET
+    
+    const [currentTrack, setCurrentTrack] = useState()
     const [currentTrackSpotify, setCurrentTrackSpotify] = useState()
-    const [previousTrack, setPreviousTrack] = useState('')
-    const [previousTrackSpotify, setPreviousTrackSpotify] = useState('')
+    const [previousTrack, setPreviousTrack] = useState()
+    const [previousTrackSpotify, setPreviousTrackSpotify] = useState()
 
 
     // Get current/previous tracks for the station
@@ -61,27 +64,23 @@ export default function NowPlaying({ station }) {
 
     //Link to track on spotify 
     function handleCurrentClick(event) {
-        if (currentTrackSpotify) {
+        if (currentTrackSpotify.spotify_url) {
             window.open(currentTrackSpotify.spotify_url, '_blank')
         }
     }
 
     //Link to track on spotify
     function handlePreviousClick(event) {
-        if (previousTrackSpotify) {
+        if (previousTrackSpotify.spotify_url) {
             window.open(previousTrackSpotify.spotify_url, '_blank')
         }
     }
 
     //Link to album art from spotify
     function handleImageClick(event) {
-        console.log(event.target.src)
         window.open(event.target.src, '_blank')
     }
 
-    const SPOTIFY_TOKEN_URL = 'https://accounts.spotify.com/api/token';
-    const SPOTIFY_CLIENT_ID = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
-    const SPOTIFY_CLIENT_SECRET = process.env.REACT_APP_SPOTIFY_CLIENT_SECRET;
     let SPOTIFY_CLIENT_ACCESS_TOKEN = ''
 
     const getToken = async () => {
@@ -120,6 +119,7 @@ export default function NowPlaying({ station }) {
         }
       };
 
+    // Search for track data on Spotify, use first result found
     async function getTrack(title, artist) {
 
         await fetchToken()
@@ -144,7 +144,7 @@ export default function NowPlaying({ station }) {
           // Get relevant track information from the response
           const trackJson = trackData.tracks.items[0];
           if (!trackJson) {
-            return "Not found";
+            return null;
           }
       
           const titleFromJson = trackJson.name;
@@ -169,7 +169,7 @@ export default function NowPlaying({ station }) {
           return trackDataResult;
         } catch (error) {
           console.error('Error fetching track:', error);
-          return "Error fetching track";
+          return null;
         }
       }
       
@@ -191,9 +191,15 @@ export default function NowPlaying({ station }) {
                     <p>
                         Current track: <strong>{currentTrack.title}</strong> by <strong>{currentTrack.artist}</strong>
                     </p>
-                    <button className='spotifyButton' onClick={handleCurrentClick}>
-                        Play on Spotify
-                    </button>
+                    {currentTrackSpotify && currentTrackSpotify.spotify_url ? ( // Check if spotify data exists
+                        <button className='spotifyButton' onClick={handleCurrentClick}>
+                            Play on Spotify
+                        </button>
+                    ) : (
+                        <button className='noSpotifyButton'>
+                            Could not find on Spotify
+                        </button>
+                    )}
                 </div>
                 ) : (
                     <p>
@@ -205,12 +211,14 @@ export default function NowPlaying({ station }) {
                     <p>
                         Previous track: <strong>{previousTrack.title}</strong> by <strong>{previousTrack.artist}</strong>
                     </p>
-                    {previousTrackSpotify ? (
+                    {previousTrackSpotify && previousTrackSpotify.spotify_url ? ( // Check if spotify data exists
                         <button className='spotifyButton' onClick={handlePreviousClick}>
                             Play on Spotify
                         </button>
                     ) : (
-                        <p>Could not find on Spotify</p>
+                        <button className='noSpotifyButton'>
+                            Could not find on Spotify
+                        </button>
                     )}
                 </div>
                 ) : (
@@ -218,7 +226,7 @@ export default function NowPlaying({ station }) {
                 )}
             </div>
             <div className='spotify-image-container'>
-                {currentTrack && currentTrackSpotify ? ( // Check if spotify data exists
+                {currentTrack && currentTrackSpotify && currentTrackSpotify.image ? ( // Check if spotify data exists
                     
                     <img
                         className="item-img"
@@ -228,9 +236,10 @@ export default function NowPlaying({ station }) {
                         title={currentTrack.name}
                     />
                     
-                ) : (<></>
+                ) : (
+                    <div className="placeholder-square"></div>
                 )}
-                {previousTrack && previousTrackSpotify ? ( // Check if spotify data exists
+                {previousTrack && previousTrackSpotify && previousTrackSpotify.image ? ( // Check if spotify data exists
                 
                     <img
                         className="item-img"
@@ -239,7 +248,8 @@ export default function NowPlaying({ station }) {
                         alt={previousTrack.name}
                         title={previousTrack.name}
                     />
-                ) : (<></>
+                ) : (
+                    <div className="placeholder-square"></div>
                 )}
             </div>
           </div>

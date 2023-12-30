@@ -33,10 +33,6 @@ export default function SearchBox({query, search, stations, saveFavourite}) {
         } else {
             setButtonText('Add station')
             setListVisible(false)
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            })
         }
         search(!query);
     };
