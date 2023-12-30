@@ -9,6 +9,7 @@ export default function NowPlaying({ station }) {
     const [previousTrackSpotify, setPreviousTrackSpotify] = useState('')
 
 
+    // Get current/previous tracks for the station
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -18,20 +19,19 @@ export default function NowPlaying({ station }) {
                 setCurrentTrack(trackData.playlist.song)
                 setPreviousTrack(trackData.playlist.previoussong)
             } catch (error) {
-
-                // console.error('Error fetching tracklist', error)
+                console.error('Error fetching tracklist', error)
             }
         }
-        // Call fetchData every 10 seconds
+        // Call every 10 seconds
         const interval = setInterval(fetchData, 10000); 
 
-        // Initial call to fetchData when the component mounts
+        // Start calling function straight away
         fetchData();
-    
-
+        // Stop on exiting function
         return () => clearInterval(interval);
     }, [])
 
+    // If current track changed, look for it on spotify
     useEffect (() => {
         if(currentTrack) {
             getTrack(currentTrack.title, currentTrack.artist).then(trackData => {
@@ -42,6 +42,7 @@ export default function NowPlaying({ station }) {
         }
     }, [currentTrack])
 
+    // If previous track changed, look for it on spotify
     useEffect (() => {
         if(previousTrack) {
             getTrack(previousTrack.title, previousTrack.artist).then(trackData => {
@@ -52,28 +53,35 @@ export default function NowPlaying({ station }) {
         }
     }, [previousTrack])
 
+    //Link to live feed when clicking on station logo
     function handleStationClick(event) {
         const liveUrl = station.liveaudio.url
         window.open(liveUrl, '_blank')
     }
+
+    //Link to track on spotify 
     function handleCurrentClick(event) {
         if (currentTrackSpotify) {
             window.open(currentTrackSpotify.spotify_url, '_blank')
         }
     }
+
+    //Link to track on spotify
     function handlePreviousClick(event) {
         if (previousTrackSpotify) {
             window.open(previousTrackSpotify.spotify_url, '_blank')
         }
     }
+
+    //Link to album art from spotify
     function handleImageClick(event) {
         console.log(event.target.src)
         window.open(event.target.src, '_blank')
     }
 
     const SPOTIFY_TOKEN_URL = 'https://accounts.spotify.com/api/token';
-    const SPOTIFY_CLIENT_ID = 'b09cadfabe924b74875e780ee4957cc6'; // Replace with your Spotify Client ID b09cadfabe924b74875e780ee4957cc6
-    const SPOTIFY_CLIENT_SECRET = 'f007dc4a32d540bebd07c86a1632560f'; // Replace with your Spotify Client Secret f007dc4a32d540bebd07c86a1632560f
+    const SPOTIFY_CLIENT_ID = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
+    const SPOTIFY_CLIENT_SECRET = process.env.REACT_APP_SPOTIFY_CLIENT_SECRET;
     let SPOTIFY_CLIENT_ACCESS_TOKEN = ''
 
     const getToken = async () => {
