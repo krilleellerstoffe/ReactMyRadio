@@ -1,18 +1,84 @@
+/* Global style */
+
 body {
     background-color: rgb(20, 20, 20);
     margin: 0px;
+    color: aliceblue;
+    font-size: 20px;
+    margin: 5px;
+    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
+/* Text styling */
+
 .text-text {
-  color: aliceblue;
   text-align: center;
-  font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 .sub-text {
+  
+  text-align: center;
+}
+
+/* Styling for controls and buttons */
+
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+}
+
+button {
+  margin: 10px;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 20px;
   color: aliceblue;
-  text-align:inherit;
-  font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  border: 2px solid aliceblue;
+  background-color: #3e3e3e;
+  transition-duration: 0.4s;
+  z-index: 5;
+}
+
+button:hover {
+  background-color: #04AA6D;
+}
+
+.noSpotifyButton:hover {
+  background-color: red;
+  cursor: not-allowed;
+}
+
+input {
+  font-size: 20px;
+  margin: 10px;
+}
+
+/* List styling */
+
+.list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(calc(20% - 20px), 1fr));
+  gap: 10px; 
+  max-width: 100vw;
+  overflow-x: scroll;
+}
+
+.list-items:hover > .list-item {
+  opacity: 0.3;
+}
+
+.list-items:hover > .list-item:hover {
+  opacity: 1; 
 }
 
 .list-item {
@@ -25,97 +91,111 @@ body {
   transition: opacity 400ms ease;
 }
 
-.item-text {
-    cursor: pointer;
-    color: aliceblue;
-    text-align: center;
-    word-wrap: break-word;
-    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    max-height: 70vh;
-    padding: clamp(0.25rem, 0.5vw, 0.25rem) 0rem;
-    transition: opacity 400ms ease;
-}
-
-.task-box {
-    cursor: pointer;
-    width: 20vh;
-    object-fit: cover;
-    flex-wrap:wrap;
-    word-wrap: break-word;
-    border: 5px solid green;
-    padding: clamp(0.25rem, 0.5vw, 1rem) 0rem;
-    transition: opacity 400ms ease;
-}
-
-#list {  
-    margin-top: 50px;
-    align-items:flex-start;
-    display: flex;
-    max-height: 70vh;
-    max-width: 100vw;
-    overflow-x: scroll;
-}
-
-#list-items {
-    margin-left: clamp(4rem, 5vw, 48rem);
-    white-space: pre-wrap;
-    position: relative;
-    z-index: 2;
-}
-
-#controls {
-    margin-left: clamp(4rem, 5vw, 48rem);
-    margin-bottom: clamp(4rem, 5vw, 48rem);
-    padding: clamp(0.25rem, 1vw, 1rem) 0rem;
-    position: relative;
-    z-index: 2;
-
-}
-
-.overlay {
-  position: absolute;
-  display: none;
-  width: 100%;
-  height: 70px;
-  bottom: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 2;
-  cursor: pointer;
-}
-
-.overlay-text {
-  position: absolute;
-  top: 10%;
-  left: 10%;
-  font-size: 20px;
-  color: aliceblue;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-
-}
-
 .list-item:hover .overlay {
   display: block;
 }
 
-#list-items:hover ~ #list-background-pattern {
-    background-size: 11vmin 11vmin;
-    opacity: 0.5;
+.item-text {
+  word-wrap: break-word;
+  max-height: 70vh;
+  padding: clamp(0.25rem, 0.5vw, 0.25rem) 0rem;
+  transition: opacity 400ms ease;
 }
 
-#list-items:hover ~ #list-background-image {
-    opacity: 0.1;
+.item-img {
+  cursor: pointer;
+  max-width: 200px;
+  max-height: 200px;
+  padding: clamp(0.25rem, 0.5vw, 1rem) 0rem;
+  transition: opacity 400ms ease;
 }
 
-#list-items:hover > .list-item {
-    opacity: 0.3;
+.now-playing-list {
+  display: flex;
+  justify-content: center;
+  gap: 10px; 
+  max-width: 100vw;
+  overflow-x: scroll;
 }
 
-#list-items:hover > .list-item:hover {
-    opacity: 1; 
+.now-playing-item {
+  max-width: 100%;
+  padding: clamp(1rem, 1vw, 1rem) 0.5rem;
 }
 
-#list-background-pattern {
+.item-container {
+  display: flex;
+  align-items: center;
+}
+
+.image-container {
+  flex: 0 0 auto;
+  position: relative;
+  margin-right: 30px;
+}
+
+.spotify-image-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; 
+}
+
+.spotify-image-container .item-img{
+  width: 100px; 
+  height: 100px;
+  margin-left: 10px;
+  display: block; 
+  z-index: 99;
+}
+
+.spotify-image-container .placeholder-square {
+  width: 100px; 
+  height: 100px; 
+  margin-left: 10px;
+  display: block;
+  background-color: transparent;
+}
+
+.image-container:hover .overlay {
+  display: block;
+}
+
+.text-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+
+/* Overlay styling */
+.overlay {
+  position: absolute;
+  cursor: pointer;
+  display: none;
+  width: 200px;
+  height: 120px;
+  bottom: 0%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.overlay-text {
+  position: absolute;
+  width: 100%;
+}
+
+.overlay-text.top {
+  top: 5%;
+  font-weight: bold;
+}
+.overlay-text.bottom {
+  bottom: 10%;
+}
+.overlay-text.bottom:hover{
+  bottom: 5%;
+}
+
+#background-pattern {
   background-image: radial-gradient(
     rgba(255, 255, 255, 0.1) 9%, 
     transparent 9%
@@ -132,20 +212,4 @@ body {
   width: 100vw;
   z-index: -1; 
   pointer-events: none; 
-}
-
-
-#list-background-image {
-  background-position: center 0%;
-  background-size: 100vmax;
-  height: 100%;
-  left: 0px;  
-  opacity: 0.15;
-  position: absolute;
-  top: 0px;
-  transition: opacity 800ms ease,
-    background-size 800ms ease,
-    background-position 800ms ease;
-  width: 100%;
-  z-index: 0;
 }

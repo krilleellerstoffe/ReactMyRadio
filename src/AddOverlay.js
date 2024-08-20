@@ -8,7 +8,7 @@ export default function AddOverlay({stationName}) {
         <>
             <div className="overlay">
                 <div className="overlay-text top">{stationName}</div>
-                <div className="overlay-text bottom">Click to remove from favourites</div>
+                <div className="overlay-text bottom">Click to add to favourites</div>
             </div>
         </>
             
